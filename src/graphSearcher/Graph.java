@@ -22,12 +22,12 @@ final class Graph
 	
 	private ArrayList<ArrayList<Integer>> adjList;
 	
-	private int[][] adjMatrix;
+	private boolean[][] adjMatrix;
 	
 	Graph()
 	{
-		vertexList = new ArrayList<Vertex>();
-		adjList = new ArrayList<ArrayList<Integer>>();
+		vertexList = null;
+		adjList = null;
 		adjMatrix = null;
 	}
 	
@@ -44,42 +44,45 @@ final class Graph
 		{
 			File graphFile = new File(graphFilePath);
 			
+			vertexList = new ArrayList<Vertex>();
+			ArrayList<String[]> edges = new ArrayList<String[]>();
+			String edge = "";
+			String[] adjVertices = null;
+			Vertex vertexFrom = null;
+			Vertex vertexTo = null;
+			Integer vertexFromID = -1;
+			Integer vertexToID = -1;
 			try (
 				BufferedReader graphFileReader = new BufferedReader(
 				new FileReader(graphFile));)
 			{	
-				ArrayList<String> edges = new ArrayList<String>();
-				String edge = "";
-				String[] vertices = null;
-				Vertex vertexFrom = null;
-				Vertex vertexTo = null;
-				Integer vertexFromIndex = -1;
-				Integer vertexToIndex = -1;
 				while ((edge = graphFileReader.readLine()) != null)
 				{
-					edges.add(edge);
+					adjVertices = edge.split(" ");
 					
-					vertices = edge.split(" ");
+					edges.add(adjVertices);
 					
-					if (vertices.length != TWO_VERTICES_PER_EDGE)
+					if (adjVertices.length != TWO_VERTICES_PER_EDGE)
 					{
 						System.err.println(
 							GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
 						System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
 					}
 					
-					vertexFromIndex = Integer.parseInt(vertices[VERTEX_FROM]);
-					vertexToIndex = Integer.parseInt(vertices[VERTEX_TO]);
+					vertexFromID = 
+						Integer.parseInt(adjVertices[VERTEX_FROM]);
+					vertexToID = 
+						Integer.parseInt(adjVertices[VERTEX_TO]);
 					
-					if (vertexFromIndex < 0 || vertexToIndex < 0)
+					if (vertexFromID < 0 || vertexToID < 0)
 					{
 						System.err.println(
 							GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
 						System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
 					}
 					
-					vertexFrom = new Vertex(vertexFromIndex, "white");
-					vertexTo = new Vertex(vertexToIndex, "white");
+					vertexFrom = new Vertex(vertexFromID, "white");
+					vertexTo = new Vertex(vertexToID, "white");
 
 					if (vertexList.contains(vertexFrom) == false)
 					{
@@ -89,12 +92,7 @@ final class Graph
 					{
 						vertexList.add(vertexTo);						
 					}
-				}	
-				
-				Collections.sort(vertexList);
-				
-				// TODO remove
-				System.out.println(vertexList);
+				}
 			}
 			catch (FileNotFoundException e)
 			{
@@ -108,7 +106,58 @@ final class Graph
 				System.err.println(e.getMessage());
 				System.exit(GraphDriver.IO_EXCEPTION);
 			}
+				
+			Collections.sort(vertexList);
+			
+			int numOfVertices = vertexList.size();
+			
+			adjList = new ArrayList<ArrayList<Integer>>(numOfVertices);		
+			for (
+				int verticesToAdd = numOfVertices; 
+				verticesToAdd > 0;
+				--verticesToAdd)
+			{
+				adjList.add(new ArrayList<Integer>());
+			}
+			adjMatrix = new boolean[numOfVertices][numOfVertices];
+			
+			
+			ArrayList<Integer> vertexFromAdjs = null;
+			for (String[] adjVerticesRename : edges)
+			{
+				vertexFromID = 
+					Integer.parseInt(adjVerticesRename[VERTEX_FROM]);
+				vertexToID =
+					Integer.parseInt(adjVerticesRename[VERTEX_TO]);
+				
+				vertexFromAdjs = adjList.get(vertexFromID);
+				if (vertexFromAdjs.contains(vertexToID) == false)
+				{
+					vertexFromAdjs.add(vertexToID);
+				}
+				
+				adjMatrix[vertexFromID][vertexToID] = true;
+			}
+			
+			for (ArrayList<Integer> vertexFromAdjsRename : adjList)
+			{
+				Collections.sort(vertexFromAdjsRename);
+			}
 		}
+		
+		// TODO remove
+//		System.out.println(vertexList);
+//		System.out.println("");
+//		System.out.println(adjList);
+//		System.out.println("");
+//		for (boolean[] vertexFrom : adjMatrix)
+//		{
+//			for (boolean vertexTo : vertexFrom)
+//			{
+//				System.out.print(vertexTo + " ");
+//			}
+//			System.out.println("");
+//		}
 		
 		// TODO keep?
 //		if (vertexList.isEmpty())
