@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 final class Graph 
 {
@@ -15,6 +16,8 @@ final class Graph
 	
 	private static final int VERTEX_TO = 1;
 	
+	private static final int NOT_CONTAINED = -1;
+	
 	private ArrayList<Vertex> vertexList;
 	
 	private ArrayList<ArrayList<Integer>> adjList;
@@ -23,8 +26,8 @@ final class Graph
 	
 	Graph()
 	{
-		vertexList = null;
-		adjList = null;
+		vertexList = new ArrayList<Vertex>();
+		adjList = new ArrayList<ArrayList<Integer>>();
 		adjMatrix = null;
 	}
 	
@@ -42,43 +45,20 @@ final class Graph
 			File graphFile = new File(graphFilePath);
 			
 			try (
-				BufferedReader lineCountReader = 
-				new BufferedReader(new FileReader(graphFile));
 				BufferedReader graphFileReader = new BufferedReader(
 				new FileReader(graphFile));)
-			{
-				int linesInGraphFile = 0;
-				while (lineCountReader.readLine() != null) 
-				{
-					++linesInGraphFile;
-				}
-				lineCountReader.close();
-				
-				if (linesInGraphFile == 0)
-				{
-					System.err.println(
-						GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
-					System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
-				}
-				
-				vertexList = new ArrayList<Vertex>(linesInGraphFile);
-				adjList = new ArrayList<ArrayList<Integer>>(linesInGraphFile);
-				for (int elementsAdded = 0; elementsAdded <= linesInGraphFile;
-					++elementsAdded)
-				{
-					vertexList.add(null);
-					adjList.add(null);
-				}
-				
-				// TODO remove
-				System.out.println(vertexList + "\n\n\n" + adjList);
-				
+			{	
+				ArrayList<String> edges = new ArrayList<String>();
 				String edge = "";
 				String[] vertices = null;
-				int vertexFrom = -1;
-				int vertexTo = -1;
+				Vertex vertexFrom = null;
+				Vertex vertexTo = null;
+				Integer vertexFromIndex = -1;
+				Integer vertexToIndex = -1;
 				while ((edge = graphFileReader.readLine()) != null)
 				{
+					edges.add(edge);
+					
 					vertices = edge.split(" ");
 					
 					if (vertices.length != TWO_VERTICES_PER_EDGE)
@@ -88,48 +68,33 @@ final class Graph
 						System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
 					}
 					
-					vertexFrom = Integer.parseInt(vertices[VERTEX_FROM]);
-					vertexTo = Integer.parseInt(vertices[VERTEX_TO]);
+					vertexFromIndex = Integer.parseInt(vertices[VERTEX_FROM]);
+					vertexToIndex = Integer.parseInt(vertices[VERTEX_TO]);
 					
-					// TODO remove
-					System.out.println("vertexFrom: " + vertexFrom);
-					System.out.println("vertexTo: " + vertexTo);
-					
-					if (vertexFrom < 0 || vertexTo < 0)
+					if (vertexFromIndex < 0 || vertexToIndex < 0)
 					{
 						System.err.println(
 							GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
 						System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
 					}
 					
-					if (vertexList.get(vertexFrom) == null)
+					vertexFrom = new Vertex(vertexFromIndex, "white");
+					vertexTo = new Vertex(vertexToIndex, "white");
+
+					if (vertexList.contains(vertexFrom) == false)
 					{
-						vertexList.add(vertexFrom, new Vertex(vertexFrom, "white"));						
+						vertexList.add(vertexFrom);						
 					}
-					
-					if (vertexList.get(vertexTo) == null)
+					if (vertexList.contains(vertexTo) == false)
 					{
-						vertexList.add(vertexTo, new Vertex(vertexTo, "white"));						
+						vertexList.add(vertexTo);						
 					}
-					
-					if (adjList.get(vertexFrom) == null)
-					{
-						adjList.add(vertexFrom, new ArrayList<Integer>());
-					}
-					if (adjList.get(vertexFrom).contains(vertexTo))
-					{
-						System.err.println(
-							GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
-						System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
-					}
-					adjList.get(vertexFrom).add(vertexTo);
 				}	
 				
-				// TODO remove
-				System.out.println(vertexList + "\n\n\n" + adjList);
+				Collections.sort(vertexList);
 				
 				// TODO remove
-				System.out.println("\n\n\n" + vertexList.get(6));
+				System.out.println(vertexList);
 			}
 			catch (FileNotFoundException e)
 			{

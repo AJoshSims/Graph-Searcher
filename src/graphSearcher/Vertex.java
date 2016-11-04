@@ -1,6 +1,6 @@
 package graphSearcher;
 
-final class Vertex
+final class Vertex implements Comparable<Vertex>
 {
 	private Integer ID;
 	
@@ -10,6 +10,38 @@ final class Vertex
 	{
 		this.ID = ID;
 		this.color = color;
+	}
+	
+	Integer getID()
+	{
+		return ID;
+	}
+	
+	String getColor()
+	{
+		return color;
+	}
+	
+	@Override
+	public boolean equals(Object object)
+	{
+		if (object instanceof Vertex)
+		{
+			Vertex otherVertex = (Vertex) object;
+			if (otherVertex.getID() == this.ID)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int compareTo(Vertex otherVertex)
+	{
+		int comparison = this.ID - otherVertex.getID();
+		return comparison;
 	}
 	
 	@Override
