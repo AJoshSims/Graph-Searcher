@@ -20,6 +20,10 @@ final class Graph
 	
 	private static final int NOT_CONTAINED = -1;
 	
+	private static final int SOURCE_DEST = 0;
+	
+	private static final int ORDER_OF_DISCOVERY = 1;
+	
 	private ArrayList<Vertex> vertexList;
 	
 	private ArrayList<ArrayList<Integer>> adjList;
@@ -42,7 +46,10 @@ final class Graph
 		
 		int[] sourceDest = readSourceDest();
 		
-		String orderOfDiscovery = dfsSearch(sourceDest);
+		String[] sourceDestPathAndOrderOfDiscovery = dfsSearch(sourceDest);
+		
+		// TODO remove
+		System.out.println("OoD: " + sourceDestPathAndOrderOfDiscovery[ORDER_OF_DISCOVERY]);
 	}
 	
 	private void readInputGraph(String graphFilePath)
@@ -212,16 +219,17 @@ final class Graph
 		return sourceDest;
 	}
 	
-	private String dfsSearch(int[] sourceDest)
+	private String[] dfsSearch(int[] sourceDest)
 	{
 		Integer source = sourceDest[VERTEX_FROM];
 		Integer dest = sourceDest[VERTEX_TO];
 		
-		String orderOfDiscovery = null;
+		String orderOfDiscovery = source + " ";
 		LinkedList<Integer> discovered = new LinkedList<Integer>();
 		Integer discoveredVertex = source;
-		
 		discovered.push(discoveredVertex);
+		
+		String sourceDestPath = "";
 		
 		Integer examinedVertexId = null;
 		Vertex adjVertex = null;
@@ -240,14 +248,26 @@ final class Graph
 				switch (adjVertex.getColor())
 				{
 					case "white":
+						if (adjVertexId == dest)
+						{
+							// TODO remove
+							LinkedList<Integer> reversed = new LinkedList<Integer>();
+							while (discovered.peek() != null)
+							{
+								reversed.addFirst(discovered.pop());
+							}
+							String reversedString = reversed.toString();
+							reversedString = reversedString.substring(1, reversedString.length() - 1);
+							reversedString = reversedString.replace(",", " ->");
+							reversedString += " -> " + dest;
+							System.out.println(reversedString);
+						}
 						orderOfDiscovery += adjVertexId + " ";
 						adjVertex.setColor("grey");
+						discovered.push(adjVertexId);
 						
 						popExaminedVertex = false;
 						break examineAdjs;
-					case "grey":
-						cycleExists = true;
-						break examineColorOfAdj;
 					case "black":
 						// Do nothing.
 				}
@@ -255,10 +275,15 @@ final class Graph
 			
 			if (popExaminedVertex == true)
 			{
+				vertexList.get(examinedVertexId).setColor("black");
 				discovered.pop();
 			}
 		}
 		
+		// TODO change
+		String[] sourceDestPathAndOrderOfDiscovery = 
+			{"bleh", orderOfDiscovery};
+		return  sourceDestPathAndOrderOfDiscovery;
 	}
 //	
 //	private String transitiveClosure()
@@ -266,10 +291,10 @@ final class Graph
 //		
 //	}
 //	
-//	private String cycleSearch()
-//	{
-//		
-//	}
+	private String cycleSearch()
+	{
+		
+	}
 //	
 //	private void printGraphStats()
 //	{
