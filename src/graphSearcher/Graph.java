@@ -21,7 +21,7 @@ final class Graph
 	private static final int NOT_CONTAINED = -1;
 	
 	private static final int FIRST_VERTEX = 0;
-	
+		
 	private static final int SOURCE = 0;
 	
 	private static final int DEST = 1;
@@ -229,7 +229,7 @@ final class Graph
 		Integer destId = sourceDest[DEST];
 		
 		String sourceDestPath = "";
-		String orderOfDiscovery = sourceId + " ";
+		String orderOfDiscovery = sourceId + ", ";
 		
 		LinkedList<Integer> discovered = new LinkedList<Integer>();
 		Integer discoveredVertex = sourceId;
@@ -254,6 +254,8 @@ final class Graph
 				switch (adjVertex.getColor())
 				{
 					case "white":
+						orderOfDiscovery += adjVertexId + ", ";
+						
 						if (adjVertexId == destId)
 						{
 							LinkedList<Integer> reversedDiscovered = 
@@ -272,12 +274,15 @@ final class Graph
 							sourceDestPath += 
 								" -> " + destId;
 							
+							orderOfDiscovery = 
+								orderOfDiscovery.substring(
+								0, orderOfDiscovery.length() - 2);
+							
 							String[] sourceDestPathAndOrderOfDiscovery = 
 								{sourceDestPath, orderOfDiscovery};
 							return sourceDestPathAndOrderOfDiscovery;
 						}
 						
-						orderOfDiscovery += adjVertexId + " ";
 						adjVertex.setColor("black");
 						discovered.push(adjVertexId);
 						
@@ -285,7 +290,7 @@ final class Graph
 						break examineAdjs;
 						
 					case "black":
-						// Do nothing.
+						break examineColorOfAdj;
 				}
 			}
 			
@@ -295,60 +300,132 @@ final class Graph
 			}
 		}
 		
-		// Clean up in preparation of the cycle search.
-		for (Vertex vert : vertexList)
-		{
-			vert.setColor("white");
-		}
-		
 		String[] sourceDestPathAndOrderOfDiscovery = {"", ""};
 		return  sourceDestPathAndOrderOfDiscovery;
 	}
 	
 	private String transitiveClosure()
 	{
+
+		
 		int numOfVertices = vertexList.size();
 		
-		boolean[] ands = new boolean[numOfVertices];
-		for (int vertex = 0; vertex < numOfVertices; ++vertex)
+		// TODO remove
+		for (int v = 0; v < vertexList.size(); ++v)
 		{
-			for (int vertexFrom = 0; vertexFrom < numOfVertices; ++vertexFrom)
+			for (int w = 0; w < vertexList.size(); ++w)
 			{
-				for (int vertexTo = 0; vertexTo < numOfVertices; ++vertexTo)
-				{
-					if ((vertexFrom != vertex) && (vertexTo != vertex))
-					{
-						adjMatrix[vertexTo][vertexFrom] = 
-							(adjMatrix[vertexTo][vertexFrom] 
-							|| 
-							(adjMatrix[vertexTo][vertex] 
-							&& adjMatrix[vertex][vertexFrom]));
-					}
-				}
+				System.out.print(adjMatrix[v][w] + " ");
 			}
+			System.out.println("");
 		}
 		
+//		boolean[][] transitiveClosureMatrix = 
+//			new boolean[numOfVertices][numOfVertices];
+//		
+//		
+//		
+//		System.arraycopy(
+//			adjMatrix, FIRST_VERTEX, 
+//			transitiveClosureMatrix, FIRST_VERTEX, 
+//			numOfVertices);
+		
+		// TODO remove
+		boolean a = false;
+		boolean b = false;
+		boolean c = false;
+		
+		for (int vertex = 0; vertex < numOfVertices; ++vertex)
+		{
+			// TODO remove
+			System.out.println("vertex: " + vertex + "| ");
+			
+			for (int vertexFrom = 0; vertexFrom < numOfVertices; ++vertexFrom)
+			{
+				// TODO remove
+				System.out.print("vertexFrom: " + vertexFrom + "| ");
+			
+				for (int vertexTo = 0; vertexTo < numOfVertices; ++vertexTo)
+				{	
+					// TODO remove
+					System.out.print("(" + vertexTo + ":");
+					
+					if ((vertexFrom != vertex) && (vertexTo != vertex))
+					{
+						adjMatrix[vertexFrom][vertexTo] = 
+							(adjMatrix[vertexFrom][vertexTo] 
+							|| 
+							(adjMatrix[vertexFrom][vertex] 
+							&& adjMatrix[vertex][vertexTo]));
+						
+						// TODO remove
+						System.out.print(adjMatrix[vertexFrom][vertexTo]);
+					}
+					
+					// TODO remove
+					else
+					{
+						System.out.print("*" + adjMatrix[vertexFrom][vertexTo] + "*");
+					}
+					
+					// TODO remove
+					System.out.print(")");
+				}
+				
+				// TODO remove
+				System.out.println("");
+			}
+			
+			// TODO remove
+			System.out.println("");
+		}
+		
+//		// TODO remove
+//		for (int v = 0; v < vertexList.size(); ++v)
+//		{
+//			for (int w = 0; w < vertexList.size(); ++w)
+//			{
+//				System.out.print(adjMatrix[v][w] + " ");
+//			}
+//			System.out.println("");
+//		}
+		
 		String transitiveClosureEdges = "";
+		String indentation = "                ";
 		for (int n = 0; n < numOfVertices; ++n)
 		{
 			for (int m = 0; m < numOfVertices; ++m)
-			{
-				if (adjMatrix[n][m] == true)
+			{				
+				if ((adjMatrix[n][m] == false))
 				{
-					transitiveClosureEdges += n + " " + m + "\n";
+					if (transitiveClosureEdges != "")
+					{
+						transitiveClosureEdges += indentation;
+					}
+					transitiveClosureEdges += 	
+						n + " " + m + "\n";
 				}
 			}
 		}
+		
+		transitiveClosureEdges = 
+			transitiveClosureEdges.substring(
+			0, transitiveClosureEdges.length() - 1);
 
 		return transitiveClosureEdges;
 	}
 	
 	private boolean cycleSearch()
 	{	
+		// Clean up in preparation of the cycle search.
+		for (Vertex vert : vertexList)
+		{
+			vert.setColor("white");
+		}
+				
 		boolean cycleExists = false;
 		
 		LinkedList<Integer> discovered = new LinkedList<Integer>();
-		vertexList.get(FIRST_VERTEX).setColor("white");
 		discovered.push(FIRST_VERTEX);
 		
 		Integer examinedVertexId = null;
@@ -358,12 +435,12 @@ final class Graph
 		{
 			examinedVertexId = discovered.peek();
 			popExaminedVertex = true;
-			
+						
 			examineAdjs:
 			for (Integer adjVertexId : adjList.get(examinedVertexId))
 			{
 				adjVertex = vertexList.get(adjVertexId);
-				
+								
 				examineColorOfAdj:
 				switch (adjVertex.getColor())
 				{
@@ -374,12 +451,13 @@ final class Graph
 						popExaminedVertex = false;
 						break examineAdjs;
 					case "grey":
-						return cycleExists = true;
+						cycleExists = true;
+						return cycleExists;
 					case "black":
-						// Do nothing.
+						break examineColorOfAdj;
 				}
 			}
-			
+						
 			if (popExaminedVertex == true)
 			{
 				vertexList.get(examinedVertexId).setColor("black");
@@ -387,7 +465,8 @@ final class Graph
 			}
 		}
 		
-		return cycleExists = false;
+		cycleExists = false;
+		return cycleExists;
 	}
 	
 	private void printGraphStats(
@@ -411,7 +490,7 @@ final class Graph
 		}
 		
 		System.out.println(
-			"DFS Discovered Vertices: " + 
+			"[DFS Discovered Vertices: " + 
 			source + ", " + dest + "] " + orderOfDiscovery);
 		System.out.println(
 			"[DFS Path: " + 

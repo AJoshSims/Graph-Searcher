@@ -8,6 +8,7 @@ package graphSearcher;
 // TODO check if vertex ids are only 1 apart (next to previous)
 // TODO check if adj is listed twice?
 // TODO dest not found case?
+// TODO vertex larger than others error
 
 // TODO constants for colors?
 
