@@ -31,5 +31,21 @@ public class MessnAround
 //		arrayList.add(null);
 //		
 //		System.out.print(arrayList.size());
+		
+		
+		
+		boolean[] a = {true, false, true, false};
+		
+		boolean[] b = {false, false, true, true};
+		
+		for (int i = 0; i < a.length; ++i)
+		{
+			if ((a[i] == true) && (b[i] == false))
+			{
+				System.out.println(i);
+			}
+		}
+
+		
 	}
 }

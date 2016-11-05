@@ -306,34 +306,18 @@ final class Graph
 	
 	private String transitiveClosure()
 	{
-
-		
 		int numOfVertices = vertexList.size();
 		
-		// TODO remove
-		for (int v = 0; v < vertexList.size(); ++v)
+		boolean[][] transitiveClosureMatrix = 
+			new boolean[numOfVertices][numOfVertices];
+
+		for (int g = 0; g < numOfVertices; ++g)
 		{
-			for (int w = 0; w < vertexList.size(); ++w)
+			for (int a = 0; a < numOfVertices; ++a)
 			{
-				System.out.print(adjMatrix[v][w] + " ");
+				transitiveClosureMatrix[g][a] = adjMatrix[g][a];
 			}
-			System.out.println("");
 		}
-		
-//		boolean[][] transitiveClosureMatrix = 
-//			new boolean[numOfVertices][numOfVertices];
-//		
-//		
-//		
-//		System.arraycopy(
-//			adjMatrix, FIRST_VERTEX, 
-//			transitiveClosureMatrix, FIRST_VERTEX, 
-//			numOfVertices);
-		
-		// TODO remove
-		boolean a = false;
-		boolean b = false;
-		boolean c = false;
 		
 		for (int vertex = 0; vertex < numOfVertices; ++vertex)
 		{
@@ -352,20 +336,20 @@ final class Graph
 					
 					if ((vertexFrom != vertex) && (vertexTo != vertex))
 					{
-						adjMatrix[vertexFrom][vertexTo] = 
-							(adjMatrix[vertexFrom][vertexTo] 
+						transitiveClosureMatrix[vertexFrom][vertexTo] = 
+							(transitiveClosureMatrix[vertexFrom][vertexTo] 
 							|| 
-							(adjMatrix[vertexFrom][vertex] 
-							&& adjMatrix[vertex][vertexTo]));
+							(transitiveClosureMatrix[vertexFrom][vertex] 
+							&& transitiveClosureMatrix[vertex][vertexTo]));
 						
 						// TODO remove
-						System.out.print(adjMatrix[vertexFrom][vertexTo]);
+						System.out.print(transitiveClosureMatrix[vertexFrom][vertexTo]);
 					}
 					
 					// TODO remove
 					else
 					{
-						System.out.print("*" + adjMatrix[vertexFrom][vertexTo] + "*");
+						System.out.print("*" + transitiveClosureMatrix[vertexFrom][vertexTo] + "*");
 					}
 					
 					// TODO remove
@@ -380,15 +364,28 @@ final class Graph
 			System.out.println("");
 		}
 		
-//		// TODO remove
-//		for (int v = 0; v < vertexList.size(); ++v)
-//		{
-//			for (int w = 0; w < vertexList.size(); ++w)
-//			{
-//				System.out.print(adjMatrix[v][w] + " ");
-//			}
-//			System.out.println("");
-//		}
+		// TODO remove
+		for (int q = 0; q < vertexList.size(); ++q)
+		{
+			for (int s = 0; s < vertexList.size(); ++s)
+			{
+				System.out.print(adjMatrix[q][s] + " ");
+			}
+			System.out.println("");
+		}
+		
+		// TODO remove
+		System.out.println("");
+		
+		// TODO remove
+		for (int v = 0; v < vertexList.size(); ++v)
+		{
+			for (int w = 0; w < vertexList.size(); ++w)
+			{
+				System.out.print(transitiveClosureMatrix[v][w] + " ");
+			}
+			System.out.println("");
+		}
 		
 		String transitiveClosureEdges = "";
 		String indentation = "                ";
@@ -396,7 +393,8 @@ final class Graph
 		{
 			for (int m = 0; m < numOfVertices; ++m)
 			{				
-				if ((adjMatrix[n][m] == false))
+				if ((transitiveClosureMatrix[n][m] == true)
+					&& (adjMatrix[n][m] == false))
 				{
 					if (transitiveClosureEdges != "")
 					{
@@ -408,9 +406,15 @@ final class Graph
 			}
 		}
 		
-		transitiveClosureEdges = 
-			transitiveClosureEdges.substring(
-			0, transitiveClosureEdges.length() - 1);
+		// TODO remove
+		if ((transitiveClosureMatrix[2][3] == true) && (adjMatrix[2][3] == false))
+		{
+			System.out.println("yahoo! " + transitiveClosureMatrix[2][3]);
+		}
+		
+//		transitiveClosureEdges = 
+//			transitiveClosureEdges.substring(
+//			0, transitiveClosureEdges.length() - 1);
 
 		return transitiveClosureEdges;
 	}
