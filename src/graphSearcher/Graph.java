@@ -20,7 +20,13 @@ final class Graph
 	
 	private static final int NOT_CONTAINED = -1;
 	
-	private static final int SOURCE_DEST = 0;
+	private static final int FIRST_VERTEX = 0;
+	
+	private static final int SOURCE = 0;
+	
+	private static final int DEST = 1;
+	
+	private static final int SOURCE_DEST_PATH = 0;
 	
 	private static final int ORDER_OF_DISCOVERY = 1;
 	
@@ -43,16 +49,23 @@ final class Graph
 		
 		int[] sourceDest = readSourceDest();
 		
-		String[] sourceDestPathAndOrderOfDiscovery = dfsSearch(sourceDest);
+		String[] sourceDestPathAndOrderOfDiscovery = 
+			dfsSearch(readSourceDest());
+		String sourceDestPath = 
+			sourceDestPathAndOrderOfDiscovery[SOURCE_DEST_PATH];
+		String orderOfDiscovery = 
+			sourceDestPathAndOrderOfDiscovery[ORDER_OF_DISCOVERY];
 		
-		// TODO remove
-		System.out.println("OoD: " + sourceDestPathAndOrderOfDiscovery[ORDER_OF_DISCOVERY]);
+		String transitiveClosureEdges = transitiveClosure();
 		
-		// TODO remove
-		System.out.println("Cycle: " + cycleSearch());
+		boolean cycleExists = cycleSearch();
 		
-		// TODO change
-		String whatever = transitiveClosure();
+		printGraphStats(
+			sourceDest,
+			sourceDestPath, 
+			orderOfDiscovery, 
+			transitiveClosureEdges,
+			cycleExists);
 	}
 	
 	private void readInputGraph(String graphFilePath)
@@ -162,20 +175,6 @@ final class Graph
 			}
 		}
 		
-		// TODO remove
-		System.out.println(vertexList);
-		System.out.println("");
-		System.out.println(adjList);
-		System.out.println("");
-		for (boolean[] vertexFrom : adjMatrix)
-		{
-			for (boolean vertexTo : vertexFrom)
-			{
-				System.out.print(vertexTo + " ");
-			}
-			System.out.println("");
-		}
-		
 		// TODO keep?
 //		if (vertexList.isEmpty())
 //		{
@@ -188,6 +187,7 @@ final class Graph
 	{
 		Scanner userInput = new Scanner(System.in);
 		String[] maybeSourceDest = userInput.nextLine().split(" ");
+		
 		if (maybeSourceDest.length != TWO_VERTICES)
 		{
 			System.err.println(GraphDriver.INVALID_SOURCE_DEST_FORMAT_MESSAGE);
@@ -196,10 +196,11 @@ final class Graph
 		
 		Integer sourceID = null;
 		Integer destID = null;
+		
 		try
 		{
-			sourceID = Integer.parseInt(maybeSourceDest[VERTEX_FROM]);
-			destID = Integer.parseInt(maybeSourceDest[VERTEX_TO]);
+			sourceID = Integer.parseInt(maybeSourceDest[SOURCE]);
+			destID = Integer.parseInt(maybeSourceDest[DEST]);
 		}
 		catch (NumberFormatException e)
 		{
@@ -224,20 +225,21 @@ final class Graph
 	
 	private String[] dfsSearch(int[] sourceDest)
 	{
-		Integer source = sourceDest[VERTEX_FROM];
-		Integer dest = sourceDest[VERTEX_TO];
-		
-		String orderOfDiscovery = source + " ";
-		LinkedList<Integer> discovered = new LinkedList<Integer>();
-		Integer discoveredVertex = source;
-		vertexList.get(source).setColor("black");
-		discovered.push(discoveredVertex);
+		Integer sourceId = sourceDest[SOURCE];
+		Integer destId = sourceDest[DEST];
 		
 		String sourceDestPath = "";
+		String orderOfDiscovery = sourceId + " ";
+		
+		LinkedList<Integer> discovered = new LinkedList<Integer>();
+		Integer discoveredVertex = sourceId;
+		vertexList.get(sourceId).setColor("black");
+		discovered.push(discoveredVertex);
 		
 		Integer examinedVertexId = null;
 		Vertex adjVertex = null;
 		boolean popExaminedVertex = true;
+		
 		while (discovered.isEmpty() == false)
 		{
 			examinedVertexId = discovered.peek();
@@ -252,26 +254,36 @@ final class Graph
 				switch (adjVertex.getColor())
 				{
 					case "white":
-						if (adjVertexId == dest)
+						if (adjVertexId == destId)
 						{
-							// TODO remove
-							LinkedList<Integer> reversed = new LinkedList<Integer>();
+							LinkedList<Integer> reversedDiscovered = 
+								new LinkedList<Integer>();
 							while (discovered.peek() != null)
 							{
-								reversed.addFirst(discovered.pop());
+								reversedDiscovered.addFirst(discovered.pop());
 							}
-							String reversedString = reversed.toString();
-							reversedString = reversedString.substring(1, reversedString.length() - 1);
-							reversedString = reversedString.replace(",", " ->");
-							reversedString += " -> " + dest;
-							System.out.println(reversedString);
+							sourceDestPath = 
+								reversedDiscovered.toString();
+							sourceDestPath = 
+								sourceDestPath.substring(
+								1, sourceDestPath.length() - 1);
+							sourceDestPath = 
+								sourceDestPath.replace(",", " ->");
+							sourceDestPath += 
+								" -> " + destId;
+							
+							String[] sourceDestPathAndOrderOfDiscovery = 
+								{sourceDestPath, orderOfDiscovery};
+							return sourceDestPathAndOrderOfDiscovery;
 						}
+						
 						orderOfDiscovery += adjVertexId + " ";
 						adjVertex.setColor("black");
 						discovered.push(adjVertexId);
 						
 						popExaminedVertex = false;
 						break examineAdjs;
+						
 					case "black":
 						// Do nothing.
 				}
@@ -283,14 +295,13 @@ final class Graph
 			}
 		}
 		
+		// Clean up in preparation of the cycle search.
 		for (Vertex vert : vertexList)
 		{
 			vert.setColor("white");
 		}
 		
-		// TODO change
-		String[] sourceDestPathAndOrderOfDiscovery = 
-			{"bleh", orderOfDiscovery};
+		String[] sourceDestPathAndOrderOfDiscovery = {"", ""};
 		return  sourceDestPathAndOrderOfDiscovery;
 	}
 	
@@ -299,36 +310,37 @@ final class Graph
 		int numOfVertices = vertexList.size();
 		
 		boolean[] ands = new boolean[numOfVertices];
-		for (int i = 0; i < numOfVertices; ++i)
+		for (int vertex = 0; vertex < numOfVertices; ++vertex)
 		{
-			for (int k = 0; k < numOfVertices; ++k)
+			for (int vertexFrom = 0; vertexFrom < numOfVertices; ++vertexFrom)
 			{
-				for (int l = 0; l < numOfVertices; ++l)
+				for (int vertexTo = 0; vertexTo < numOfVertices; ++vertexTo)
 				{
-					if ((k != i) && (l != i))
+					if ((vertexFrom != vertex) && (vertexTo != vertex))
 					{
-						adjMatrix[l][k] = 
-							(adjMatrix[l][k] 
-							|| (adjMatrix[l][i] && adjMatrix[i][k]));
+						adjMatrix[vertexTo][vertexFrom] = 
+							(adjMatrix[vertexTo][vertexFrom] 
+							|| 
+							(adjMatrix[vertexTo][vertex] 
+							&& adjMatrix[vertex][vertexFrom]));
 					}
 				}
 			}
 		}
 		
+		String transitiveClosureEdges = "";
 		for (int n = 0; n < numOfVertices; ++n)
 		{
 			for (int m = 0; m < numOfVertices; ++m)
 			{
 				if (adjMatrix[n][m] == true)
 				{
-					// TODO change
-					System.out.println(n + " " + m);
+					transitiveClosureEdges += n + " " + m + "\n";
 				}
 			}
 		}
-		
-		// TODO change
-		return null;
+
+		return transitiveClosureEdges;
 	}
 	
 	private boolean cycleSearch()
@@ -336,8 +348,8 @@ final class Graph
 		boolean cycleExists = false;
 		
 		LinkedList<Integer> discovered = new LinkedList<Integer>();
-		vertexList.get(0).setColor("white");
-		discovered.push(0);
+		vertexList.get(FIRST_VERTEX).setColor("white");
+		discovered.push(FIRST_VERTEX);
 		
 		Integer examinedVertexId = null;
 		Vertex adjVertex = null;
@@ -377,9 +389,37 @@ final class Graph
 		
 		return cycleExists = false;
 	}
-//	
-//	private void printGraphStats()
-//	{
-//		
-//	}
+	
+	private void printGraphStats(
+		int[] sourceDest,
+		String sourceDestPath, 
+		String orderOfDiscovery, 
+		String transitiveClosureEdges,
+		boolean cycleExists)
+	{
+		int source = sourceDest[SOURCE];
+		int dest = sourceDest[DEST];
+		
+		String cycleExistsString = null;
+		if (cycleExists == true)
+		{
+			cycleExistsString = "Cycle Exists";
+		}
+		else
+		{
+			cycleExistsString = "Cycle Does Not Exist";
+		}
+		
+		System.out.println(
+			"DFS Discovered Vertices: " + 
+			source + ", " + dest + "] " + orderOfDiscovery);
+		System.out.println(
+			"[DFS Path: " + 
+			source + ", " + dest + "] " + sourceDestPath);
+		System.out.println(
+			"[TC: New Edges] " + 
+			transitiveClosureEdges);
+		System.out.println(
+			"[Cycle]: " + cycleExistsString);
+	}
 }
