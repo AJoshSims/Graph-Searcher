@@ -2,19 +2,19 @@ package perform;
 
 final class Vertex implements Comparable<Vertex>
 {
-	private Integer ID;
+	private Integer id;
 	
 	private String color;
 	
-	Vertex(Integer ID, String color)
+	Vertex(Integer id, String color)
 	{
-		this.ID = ID;
+		this.id = id;
 		this.color = color;
 	}
 	
 	Integer getID()
 	{
-		return ID;
+		return id;
 	}
 	
 	String getColor()
@@ -33,7 +33,7 @@ final class Vertex implements Comparable<Vertex>
 		if (object instanceof Vertex)
 		{
 			Vertex otherVertex = (Vertex) object;
-			if (otherVertex.getID() == this.ID)
+			if (otherVertex.getID() == this.id)
 			{
 				return true;
 			}
@@ -45,14 +45,14 @@ final class Vertex implements Comparable<Vertex>
 	@Override
 	public int compareTo(Vertex otherVertex)
 	{
-		int comparison = this.ID - otherVertex.getID();
+		int comparison = this.id - otherVertex.getID();
 		return comparison;
 	}
 	
 	@Override
 	public String toString()
 	{
-		return "" + ID;
+		return "" + id;
 	}
 }
 

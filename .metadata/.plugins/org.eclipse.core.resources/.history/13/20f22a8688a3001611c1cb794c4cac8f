@@ -1,0 +1,12 @@
+package exceptions;
+
+public class InvalidVertexException extends Exception
+{
+	public InvalidVertexException()
+	{
+		super(
+			"." +
+			"\nThe source and destination must be integers between 0 and " +
+			"(the number of vertices - 1).");
+	}
+}

@@ -1,0 +1,13 @@
+package exceptions;
+
+public class InvalidSourceDestFormatException extends Exception
+{
+	public InvalidSourceDestFormatException()
+	{
+		super(
+			"You specified either an invalid source vertex or an invalid" +
+			"destination vertex."
+			"Both vertices must be integers between"
+			"\nThe valid format: <source> <dest>");
+	}
+}

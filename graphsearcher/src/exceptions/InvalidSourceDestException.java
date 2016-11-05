@@ -5,8 +5,12 @@ public class InvalidSourceDestException extends Exception
 	public InvalidSourceDestException()
 	{
 		super(
-			"You specified an invalid source or an invalid destination." +
-			"\nThe source and destination must be integers between 0 and " +
-			"(the number of vertices - 1).");
+			"You specified an invalid source vertex or an invalid " +
+			"destination vertex." +
+			"\nBoth vertices must be integers between 0 and (the number of " +
+			"vertices - 1)." +
+			"\nEnsure that the format is correct before entering the source " +
+			"and destination vertices." +
+			"\nThe valid format: <source_vertex> <destination_vertex>");
 	}
 }

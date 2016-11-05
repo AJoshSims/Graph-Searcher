@@ -1,6 +1,11 @@
 package perform;
 
+import java.io.IOException;
+
+import exceptions.CannotReadGraphFileException;
+import exceptions.InvalidEdgeException;
 import exceptions.InvalidNumOfCmdLineArgsException;
+import exceptions.InvalidSourceDestException;
 
 // TODO check if each vertex has unique integer ID
 // TODO check if graph file has 2 vertices per line format
@@ -71,25 +76,21 @@ public final class GraphDriver
 	 * Exit code indicating that the specified text file, which represents the 
 	 * directed graph, could not be read.
 	 */
-	static final int COULD_NOT_READ_GRAPH_FILE = 2;
+	static final int CANNOT_READ_GRAPH_FILE = 2;
 	
 	/**
 	 * Exit code indicating that the specified text file does not represent
 	 * the directed graph in the correct format.
 	 */
-	static final int INVALID_GRAPH_FILE_FORMAT = 3;
+	static final int INVALID_EDGE = 3;
 	
 	/**
-	 * Exit code indicating that the source and destination vertices were not
-	 * specified in the correct format.
+	 * Exit code indicating that either the source vertex or the destination 
+	 * vertex is not an integer between 0 and (the number of vertices - 1) or
+	 * that the source and destination vertices were specified in an incorrect
+	 * format.
 	 */
-	static final int INVALID_SOURCE_DEST_FORMAT = 4;
-	
-	/**
-	 * Exit code indicating that the source or destination vertex is not an
-	 * integer between 0 and (the number of vertices - 1).
-	 */
-	static final int INVALID_SOURCE_DEST = 5;
+	static final int INVALID_SOURCE_DEST = 4;
 	
 	/**
 	 * Exit code indicating an error related to an IO event.
@@ -127,7 +128,31 @@ public final class GraphDriver
 		Graph graph = new Graph();
 		
 		String graphFilePath = args[INDEX_OF_GRAPH_FILE_PATH_ARG];
-		graph.startGraph(graphFilePath);
+		
+		try
+		{
+			graph.startGraph(graphFilePath);
+		}
+		catch (CannotReadGraphFileException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(CANNOT_READ_GRAPH_FILE);
+		}
+		catch (InvalidEdgeException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(INVALID_EDGE);
+		}
+		catch (InvalidSourceDestException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(INVALID_SOURCE_DEST);
+		}
+		catch (IOException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(IO_EXCEPTION);
+		}
 	}
 	
 	/**

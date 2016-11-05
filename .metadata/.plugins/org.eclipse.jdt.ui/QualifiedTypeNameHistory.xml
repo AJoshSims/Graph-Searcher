@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="exceptions.InvalidGraphFileFormatException"/>
+<fullyQualifiedTypeName name="exceptions.CouldNotReadGraphFileException"/>
+<fullyQualifiedTypeName name="exceptions.InvalidVertexException"/>
+<fullyQualifiedTypeName name="exceptions.CannotReadGraphFileException"/>
+<fullyQualifiedTypeName name="exceptions.InvalidEdgeException"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
+<fullyQualifiedTypeName name="exceptions.InvalidSourceDestFormatException"/>
+<fullyQualifiedTypeName name="exceptions.InvalidSourceDestException"/>
+</qualifiedTypeNameHistroy>
