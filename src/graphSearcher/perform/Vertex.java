@@ -1,4 +1,4 @@
-package graphSearcher;
+package graphSearcher.perform;
 
 final class Vertex implements Comparable<Vertex>
 {

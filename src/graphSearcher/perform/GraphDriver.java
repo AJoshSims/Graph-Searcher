@@ -1,6 +1,6 @@
-package graphSearcher;
+package graphSearcher.perform;
 
-import errors.InvalidNumOfCmdLineArgsException;
+import graphSearcher.errors.InvalidNumOfCmdLineArgsException;
 
 // TODO check if each vertex has unique integer ID
 // TODO check if graph file has 2 vertices per line format
@@ -17,6 +17,9 @@ import errors.InvalidNumOfCmdLineArgsException;
 // TODO put errors in their own file?
 
 // TODO change ID to id
+
+
+// TODO modify usage message
 
 // TODO invalidGraphFormat boolean instead of exiting everywhere?
 
@@ -88,7 +91,8 @@ public final class GraphDriver
 	
 	// Methods
 	/**
-	 * Wrapper method for startGraph.
+	 * Wrapper method for startGraph which executes the purpose of this 
+	 * program.
 	 * 
 	 * @param args - <graph_file_path>
 	 */

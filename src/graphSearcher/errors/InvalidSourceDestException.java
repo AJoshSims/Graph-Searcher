@@ -1,4 +1,4 @@
-package errors;
+package graphSearcher.errors;
 
 public class InvalidSourceDestException extends Exception
 {

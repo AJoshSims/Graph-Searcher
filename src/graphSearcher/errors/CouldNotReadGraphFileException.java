@@ -1,6 +1,6 @@
-package errors;
+package graphSearcher.errors;
 
-import graphSearcher.GraphDriver;
+import graphSearcher.perform.GraphDriver;
 
 public class CouldNotReadGraphFileException extends Exception
 {	
