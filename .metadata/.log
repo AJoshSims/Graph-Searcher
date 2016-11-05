@@ -10330,3 +10330,6 @@ This warning can be switched off on the Team > Git > Confirmations and Warnings 
 
 !ENTRY org.eclipse.debug.ui 4 120 2016-11-05 18:30:55.401
 !MESSAGE org.eclipse.debug.ui.toggleBreakpointsTargetFactory extension failed to load breakpoint toggle target because the specified id is already registered.  Specified ID is: org.chromium.debug.ui.ChromiumToggleBreakpointTargetFactory
+
+!ENTRY com.sage.x3.xdt.common.core 1 0 2016-11-05 19:30:48.131
+!MESSAGE Dbgp proxy discovering finished by StatusInfo OK: null

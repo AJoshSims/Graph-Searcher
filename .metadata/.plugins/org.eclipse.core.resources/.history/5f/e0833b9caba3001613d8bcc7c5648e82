@@ -7,6 +7,8 @@ import exceptions.InvalidEdgeException;
 import exceptions.InvalidNumOfCmdLineArgsException;
 import exceptions.InvalidSourceDestException;
 
+// TODO modify usage message
+
 /**
  * Reads a specified text file which represents a directed graph, performs a
  * depth-first search from the specified source vertex to the specified 

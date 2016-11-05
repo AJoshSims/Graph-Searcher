@@ -62,7 +62,7 @@ final class Graph
 	 */
 	private static final int DEST_VERTEX = 1;
 	
-	// Output constants
+	// String constants
 	/**
 	 * The index, in a two element long array, of the string which describes
 	 * the order of discovery of vertices in the depth-first search.
@@ -76,7 +76,6 @@ final class Graph
 	 */
 	private static final int SOURCE_DEST_PATH = 1;
 	
-	// Data structures for graph
 	/**
 	 * The list of vertices which exist in the graph.
 	 */
@@ -94,7 +93,6 @@ final class Graph
 	 */
 	private boolean[][] adjMatrix;
 	
-	// Constructors
 	/** 
 	 * Initializes the data structures, which represent the directed graph, 
 	 * to null.
@@ -106,7 +104,6 @@ final class Graph
 		adjMatrix = null;
 	}
 	
-	// Methods
 	/**
 	 * Reads a specified text file which represents a directed graph, performs 
 	 * a depth-first search from the specified source vertex to the specified 
