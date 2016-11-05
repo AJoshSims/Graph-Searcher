@@ -11495,3 +11495,6 @@ This warning can be switched off on the Team > Git > Confirmations and Warnings 
 !ENTRY mirur.mirur-ui 1 0 2016-11-05 16:51:30.863
 !MESSAGE 16:51:30    INFO: main - GLCapabilityEventListener.logGLExtensions: OpenGL extension found: WGL_ARB_create_context_robustness
 
+
+!ENTRY com.sage.x3.xdt.common.core 1 0 2016-11-05 17:47:32.994
+!MESSAGE Dbgp proxy discovering finished by StatusInfo OK: null

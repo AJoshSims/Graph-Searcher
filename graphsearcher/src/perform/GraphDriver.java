@@ -7,7 +7,6 @@ import exceptions.InvalidEdgeException;
 import exceptions.InvalidNumOfCmdLineArgsException;
 import exceptions.InvalidSourceDestException;
 
-// TODO check if each vertex has unique integer ID
 // TODO check if graph file has 2 vertices per line format
 // TODO negative int vertices should be ok right?
 // TODO check for file that contains no text ended by newline
@@ -74,7 +73,7 @@ public final class GraphDriver
 	
 	/**
 	 * Exit code indicating that the specified text file, which represents the 
-	 * directed graph, could not be read.
+	 * directed graph, cannot be read.
 	 */
 	static final int CANNOT_READ_GRAPH_FILE = 2;
 	

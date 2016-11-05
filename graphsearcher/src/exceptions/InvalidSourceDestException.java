@@ -1,7 +1,17 @@
 package exceptions;
 
-public class InvalidSourceDestException extends Exception
+/**
+ * Indicates that an invalid source vertex or an invalid destination vertex has
+ * been specified.
+ * 
+ * @author Joshua Sims
+ * @version 29 October 2016
+ */
+public final class InvalidSourceDestException extends Exception
 {
+	/**
+	 * Initializes the exception with a helpful error message.
+	 */
 	public InvalidSourceDestException()
 	{
 		super(

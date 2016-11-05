@@ -1,0 +1,58 @@
+package perform;
+
+final class Vertex implements Comparable<Vertex>
+{
+	private Integer id;
+	
+	private String color;
+	
+	Vertex(Integer id, String color)
+	{
+		this.id = id;
+		this.color = color;
+	}
+	
+	Integer getID()
+	{
+		return id;
+	}
+	
+	String getColor()
+	{
+		return color;
+	}
+	
+	void setColor(String color)
+	{
+		this.color = color;
+	}
+	
+	@Override
+	public boolean equals(Object object)
+	{
+		if (object instanceof Vertex)
+		{
+			Vertex otherVertex = (Vertex) object;
+			if (otherVertex.getID() == this.id)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int compareTo(Vertex otherVertex)
+	{
+		int comparison = this.id - otherVertex.getID();
+		return comparison;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "" + id;
+	}
+}
+
