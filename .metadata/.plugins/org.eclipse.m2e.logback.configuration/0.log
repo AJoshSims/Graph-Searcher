@@ -1,0 +1,5 @@
+2016-11-05 13:29:04,139 [Safe X3 Studio HTTP server] INFO  org.eclipse.jetty.util.log - Logging initialized @84072ms
+2016-11-05 13:29:04,452 [Safe X3 Studio HTTP server] INFO  org.eclipse.jetty.server.Server - jetty-9.2.13.v20150730
+2016-11-05 13:29:04,587 [Safe X3 Studio HTTP server] INFO  o.e.j.server.handler.ContextHandler - Started o.e.j.s.ServletContextHandler@7a1f30fe{/,null,AVAILABLE}
+2016-11-05 13:29:04,616 [Safe X3 Studio HTTP server] INFO  o.e.jetty.server.ServerConnector - Started ServerConnector@29f6e685{HTTP/1.1}{0.0.0.0:5493}
+2016-11-05 13:29:04,617 [Safe X3 Studio HTTP server] INFO  org.eclipse.jetty.server.Server - Started @84553ms
