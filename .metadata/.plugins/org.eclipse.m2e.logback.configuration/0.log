@@ -24,3 +24,10 @@
 2016-11-05 16:47:33,817 [Safe X3 Studio HTTP server] INFO  o.e.j.server.handler.ContextHandler - Started o.e.j.s.ServletContextHandler@24946bc5{/,null,AVAILABLE}
 2016-11-05 16:47:33,857 [Safe X3 Studio HTTP server] INFO  o.e.jetty.server.ServerConnector - Started ServerConnector@40b3f765{HTTP/1.1}{0.0.0.0:5493}
 2016-11-05 16:47:33,857 [Safe X3 Studio HTTP server] INFO  org.eclipse.jetty.server.Server - Started @28339ms
+2016-11-05 18:29:53,369 [Framework stop] INFO  o.e.jetty.server.ServerConnector - Stopped ServerConnector@40b3f765{HTTP/1.1}{0.0.0.0:5493}
+2016-11-05 18:29:53,399 [Framework stop] INFO  o.e.j.server.handler.ContextHandler - Stopped o.e.j.s.ServletContextHandler@24946bc5{/,null,UNAVAILABLE}
+2016-11-05 18:30:49,213 [Safe X3 Studio HTTP server] INFO  org.eclipse.jetty.util.log - Logging initialized @30431ms
+2016-11-05 18:30:49,675 [Safe X3 Studio HTTP server] INFO  org.eclipse.jetty.server.Server - jetty-9.2.13.v20150730
+2016-11-05 18:30:49,821 [Safe X3 Studio HTTP server] INFO  o.e.j.server.handler.ContextHandler - Started o.e.j.s.ServletContextHandler@5cb3bd6e{/,null,AVAILABLE}
+2016-11-05 18:30:49,845 [Safe X3 Studio HTTP server] INFO  o.e.jetty.server.ServerConnector - Started ServerConnector@1c9af4eb{HTTP/1.1}{0.0.0.0:5493}
+2016-11-05 18:30:49,846 [Safe X3 Studio HTTP server] INFO  org.eclipse.jetty.server.Server - Started @31068ms

@@ -106,3 +106,4 @@ final class Vertex implements Comparable<Vertex>
 		return "" + id;
 	}
 }
+

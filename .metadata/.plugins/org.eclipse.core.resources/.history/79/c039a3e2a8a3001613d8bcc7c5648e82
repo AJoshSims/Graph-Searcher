@@ -7,7 +7,14 @@ import exceptions.InvalidEdgeException;
 import exceptions.InvalidNumOfCmdLineArgsException;
 import exceptions.InvalidSourceDestException;
 
+
+
+
+
+
 // TODO modify usage message
+
+// TODO invalidGraphFormat boolean instead of exiting everywhere?
 
 /**
  * Reads a specified text file which represents a directed graph, performs a

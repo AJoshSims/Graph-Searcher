@@ -7,7 +7,25 @@ import exceptions.InvalidEdgeException;
 import exceptions.InvalidNumOfCmdLineArgsException;
 import exceptions.InvalidSourceDestException;
 
+// TODO check if graph file has 2 vertices per line format
+// TODO negative int vertices should be ok right?
+// TODO check for file that contains no text ended by newline
+// TODO check if vertex ids are positive ints
+// TODO check if vertex ids are only 1 apart (next to previous)
+// TODO check if adj is listed twice?
+// TODO dest not found case?
+// TODO vertex larger than others error
+
+// TODO constants for colors?
+
+// TODO put errors in their own file?
+
+// TODO change ID to id
+
+
 // TODO modify usage message
+
+// TODO invalidGraphFormat boolean instead of exiting everywhere?
 
 /**
  * Reads a specified text file which represents a directed graph, performs a

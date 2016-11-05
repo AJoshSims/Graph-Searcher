@@ -21,6 +21,7 @@ public final class InvalidEdgeException extends Exception
 			"\n1 3" +
 			"\n2 0" +
 			"\n4 5" +
+			"\n" +
 			"\nEach vertex ID must be an integer between 0 and " +
 			"(the number of vertices - 1)." +
 			"\nRepetitions of adjacencies are not permitted.");
