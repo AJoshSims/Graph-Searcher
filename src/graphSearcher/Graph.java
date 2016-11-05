@@ -30,14 +30,11 @@ final class Graph
 	
 	private boolean[][] adjMatrix;
 	
-	private boolean cycleExists;
-	
 	Graph()
 	{
 		vertexList = null;
 		adjList = null;
 		adjMatrix = null;
-		cycleExists = false;
 	}
 	
 	void startGraph(String graphFilePath)
@@ -50,6 +47,12 @@ final class Graph
 		
 		// TODO remove
 		System.out.println("OoD: " + sourceDestPathAndOrderOfDiscovery[ORDER_OF_DISCOVERY]);
+		
+		// TODO remove
+		System.out.println("Cycle: " + cycleSearch());
+		
+		// TODO change
+		String whatever = transitiveClosure();
 	}
 	
 	private void readInputGraph(String graphFilePath)
@@ -227,6 +230,7 @@ final class Graph
 		String orderOfDiscovery = source + " ";
 		LinkedList<Integer> discovered = new LinkedList<Integer>();
 		Integer discoveredVertex = source;
+		vertexList.get(source).setColor("black");
 		discovered.push(discoveredVertex);
 		
 		String sourceDestPath = "";
@@ -263,11 +267,102 @@ final class Graph
 							System.out.println(reversedString);
 						}
 						orderOfDiscovery += adjVertexId + " ";
+						adjVertex.setColor("black");
+						discovered.push(adjVertexId);
+						
+						popExaminedVertex = false;
+						break examineAdjs;
+					case "black":
+						// Do nothing.
+				}
+			}
+			
+			if (popExaminedVertex == true)
+			{
+				discovered.pop();
+			}
+		}
+		
+		for (Vertex vert : vertexList)
+		{
+			vert.setColor("white");
+		}
+		
+		// TODO change
+		String[] sourceDestPathAndOrderOfDiscovery = 
+			{"bleh", orderOfDiscovery};
+		return  sourceDestPathAndOrderOfDiscovery;
+	}
+	
+	private String transitiveClosure()
+	{
+		int numOfVertices = vertexList.size();
+		
+		boolean[] ands = new boolean[numOfVertices];
+		for (int i = 0; i < numOfVertices; ++i)
+		{
+			for (int k = 0; k < numOfVertices; ++k)
+			{
+				for (int l = 0; l < numOfVertices; ++l)
+				{
+					if ((k != i) && (l != i))
+					{
+						adjMatrix[l][k] = 
+							(adjMatrix[l][k] 
+							|| (adjMatrix[l][i] && adjMatrix[i][k]));
+					}
+				}
+			}
+		}
+		
+		for (int n = 0; n < numOfVertices; ++n)
+		{
+			for (int m = 0; m < numOfVertices; ++m)
+			{
+				if (adjMatrix[n][m] == true)
+				{
+					// TODO change
+					System.out.println(n + " " + m);
+				}
+			}
+		}
+		
+		// TODO change
+		return null;
+	}
+	
+	private boolean cycleSearch()
+	{	
+		boolean cycleExists = false;
+		
+		LinkedList<Integer> discovered = new LinkedList<Integer>();
+		vertexList.get(0).setColor("white");
+		discovered.push(0);
+		
+		Integer examinedVertexId = null;
+		Vertex adjVertex = null;
+		boolean popExaminedVertex = true;
+		while (discovered.isEmpty() == false)
+		{
+			examinedVertexId = discovered.peek();
+			popExaminedVertex = true;
+			
+			examineAdjs:
+			for (Integer adjVertexId : adjList.get(examinedVertexId))
+			{
+				adjVertex = vertexList.get(adjVertexId);
+				
+				examineColorOfAdj:
+				switch (adjVertex.getColor())
+				{
+					case "white":
 						adjVertex.setColor("grey");
 						discovered.push(adjVertexId);
 						
 						popExaminedVertex = false;
 						break examineAdjs;
+					case "grey":
+						return cycleExists = true;
 					case "black":
 						// Do nothing.
 				}
@@ -280,20 +375,7 @@ final class Graph
 			}
 		}
 		
-		// TODO change
-		String[] sourceDestPathAndOrderOfDiscovery = 
-			{"bleh", orderOfDiscovery};
-		return  sourceDestPathAndOrderOfDiscovery;
-	}
-//	
-//	private String transitiveClosure()
-//	{
-//		
-//	}
-//	
-	private String cycleSearch()
-	{
-		
+		return cycleExists = false;
 	}
 //	
 //	private void printGraphStats()
