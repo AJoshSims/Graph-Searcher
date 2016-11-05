@@ -27,10 +27,14 @@ import graphSearcher.errors.InvalidNumOfCmdLineArgsException;
  * Reads a specified text file which represents a directed graph, performs a
  * depth-first search from the specified source vertex to the specified 
  * destination vertex, prints the order of discovery of the vertices and the
- * first discovered path to the destination vertex to the console if the 
- * destination was found, determines the transitive closure of the graph, 
- * prints the transitive closure edges to the console, determines if the graph
- * is cyclic, and prints to the console whether or not the graph is cyclic.
+ * first discovered path between the source vertex and destination vertex to 
+ * the console if the destination was found, determines the transitive closure 
+ * of the graph, prints the transitive closure edges to the console, determines 
+ * if the graph is cyclic, and prints to the console whether or not the graph 
+ * is cyclic.
+ * 
+ * <p>Wrapper class for Graph which is responsible for performing the purpose
+ * of this program.
  * 
  * @author Joshua Sims
  * @version 29 October 2016
@@ -38,6 +42,9 @@ import graphSearcher.errors.InvalidNumOfCmdLineArgsException;
 public final class GraphDriver 
 {
 	// Usage message
+	/**
+	 * Indicates the command line parameters for this program.
+	 */
 	public static final String USAGE_MESSAGE = "\nUsage: <graph_file_path>";
 	
 	// Possible numbers of command line arguments
@@ -91,8 +98,17 @@ public final class GraphDriver
 	
 	// Methods
 	/**
-	 * Wrapper method for startGraph which executes the purpose of this 
-	 * program.
+	 * Reads a specified text file which represents a directed graph, performs 
+	 * a depth-first search from the specified source vertex to the specified 
+	 * destination vertex, prints the order of discovery of the vertices and 
+	 * the first discovered path between the source vertex and destination 
+	 * vertex to the console if the destination was found, determines the 
+	 * transitive closure of the graph, prints the transitive closure edges to 
+	 * the console, determines if the graph is cyclic, and prints to the 
+	 * console whether or not the graph is cyclic.
+	 * 
+	 * <p>Wrapper method for startGraph which is responsible for performing 
+	 * the purpose of this program.
 	 * 
 	 * @param args - <graph_file_path>
 	 */

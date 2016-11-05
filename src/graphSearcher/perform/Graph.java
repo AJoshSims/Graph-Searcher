@@ -10,6 +10,19 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+/**
+ * Reads a specified text file which represents a directed graph, performs a
+ * depth-first search from the specified source vertex to the specified 
+ * destination vertex, prints the order of discovery of the vertices and the
+ * first discovered path between the source vertex and destination vertex to 
+ * the console if the destination was found, determines the transitive closure 
+ * of the graph, prints the transitive closure edges to the console, determines 
+ * if the graph is cyclic, and prints to the console whether or not the graph 
+ * is cyclic.
+ * 
+ * @author Joshua Sims
+ * @version 29 October 2016
+ */
 final class Graph 
 {
 	private static final int TWO_VERTICES = 2;
@@ -17,9 +30,7 @@ final class Graph
 	private static final int VERTEX_FROM = 0;
 	
 	private static final int VERTEX_TO = 1;
-	
-	private static final int NOT_CONTAINED = -1;
-	
+		
 	private static final int FIRST_VERTEX = 0;
 		
 	private static final int SOURCE = 0;
@@ -36,6 +47,10 @@ final class Graph
 	
 	private boolean[][] adjMatrix;
 	
+	/** 
+	 * Initializes the data structures, which represent the directed graph, 
+	 * to null.
+	 */
 	Graph()
 	{
 		vertexList = null;
@@ -43,6 +58,19 @@ final class Graph
 		adjMatrix = null;
 	}
 	
+	/**
+	 * Reads a specified text file which represents a directed graph, performs 
+	 * a depth-first search from the specified source vertex to the specified 
+	 * destination vertex, prints the order of discovery of the vertices and 
+	 * the first discovered path to the destination vertex to the console if 
+	 * the destination was found, determines the transitive closure of the 
+	 * graph, prints the transitive closure edges to the console, determines if 
+	 * the graph is cyclic, and prints to the console whether or not the graph 
+	 * is cyclic.
+	 * 
+	 * @param graphFilePath - the path of the text file which represents the 
+	 * directed graph.
+	 */
 	void startGraph(String graphFilePath)
 	{
 		readInputGraph(graphFilePath);
@@ -50,7 +78,7 @@ final class Graph
 		int[] sourceDest = readSourceDest();
 		
 		String[] sourceDestPathAndOrderOfDiscovery = 
-			dfsSearch(readSourceDest());
+			dfsSearch(sourceDest);
 		String sourceDestPath = 
 			sourceDestPathAndOrderOfDiscovery[SOURCE_DEST_PATH];
 		String orderOfDiscovery = 
@@ -70,109 +98,107 @@ final class Graph
 	
 	private void readInputGraph(String graphFilePath)
 	{	
-		if (graphFilePath != null)
-		{
-			File graphFile = new File(graphFilePath);
-			
-			vertexList = new ArrayList<Vertex>();
-			ArrayList<String[]> edges = new ArrayList<String[]>();
-			String edge = "";
-			String[] adjVertices = null;
-			Vertex vertexFrom = null;
-			Vertex vertexTo = null;
-			Integer vertexFromID = -1;
-			Integer vertexToID = -1;
-			try (
-				BufferedReader graphFileReader = new BufferedReader(
-				new FileReader(graphFile));)
-			{	
-				while ((edge = graphFileReader.readLine()) != null)
-				{
-					adjVertices = edge.split(" ");
-					
-					edges.add(adjVertices);
-					
-					if (adjVertices.length != TWO_VERTICES)
-					{
-						System.err.println(
-							GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
-						System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
-					}
-					
-					vertexFromID = 
-						Integer.parseInt(adjVertices[VERTEX_FROM]);
-					vertexToID = 
-						Integer.parseInt(adjVertices[VERTEX_TO]);
-					
-					if (vertexFromID < 0 || vertexToID < 0)
-					{
-						System.err.println(
-							GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
-						System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
-					}
-					
-					vertexFrom = new Vertex(vertexFromID, "white");
-					vertexTo = new Vertex(vertexToID, "white");
-
-					if (vertexList.contains(vertexFrom) == false)
-					{
-						vertexList.add(vertexFrom);						
-					}
-					if (vertexList.contains(vertexTo) == false)
-					{
-						vertexList.add(vertexTo);						
-					}
-				}
-			}
-			catch (FileNotFoundException e)
+		
+		File graphFile = new File(graphFilePath);
+		
+		vertexList = new ArrayList<Vertex>();
+		ArrayList<String[]> edges = new ArrayList<String[]>();
+		String edge = "";
+		String[] adjVertices = null;
+		Vertex vertexFrom = null;
+		Vertex vertexTo = null;
+		Integer vertexFromID = -1;
+		Integer vertexToID = -1;
+		try (
+			BufferedReader graphFileReader = new BufferedReader(
+			new FileReader(graphFile));)
+		{	
+			while ((edge = graphFileReader.readLine()) != null)
 			{
-				System.err.println(
-					GraphDriver.COULD_NOT_READ_GRAPH_FILE_MESSAGE +
-					GraphDriver.USAGE_MESSAGE);
-				System.exit(GraphDriver.COULD_NOT_READ_GRAPH_FILE);
-			}
-			catch (IOException e)
-			{
-				System.err.println(e.getMessage());
-				System.exit(GraphDriver.IO_EXCEPTION);
-			}
+				adjVertices = edge.split(" ");
 				
-			Collections.sort(vertexList);
-			
-			int numOfVertices = vertexList.size();
-			
-			adjList = new ArrayList<ArrayList<Integer>>(numOfVertices);		
-			for (
-				int verticesToAdd = numOfVertices; 
-				verticesToAdd > 0;
-				--verticesToAdd)
-			{
-				adjList.add(new ArrayList<Integer>());
-			}
-			adjMatrix = new boolean[numOfVertices][numOfVertices];
-			
-			
-			ArrayList<Integer> vertexFromAdjs = null;
-			for (String[] adjVerticesRename : edges)
-			{
+				edges.add(adjVertices);
+				
+				if (adjVertices.length != TWO_VERTICES)
+				{
+					System.err.println(
+						GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
+					System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
+				}
+				
 				vertexFromID = 
-					Integer.parseInt(adjVerticesRename[VERTEX_FROM]);
-				vertexToID =
-					Integer.parseInt(adjVerticesRename[VERTEX_TO]);
+					Integer.parseInt(adjVertices[VERTEX_FROM]);
+				vertexToID = 
+					Integer.parseInt(adjVertices[VERTEX_TO]);
 				
-				vertexFromAdjs = adjList.get(vertexFromID);
-				if (vertexFromAdjs.contains(vertexToID) == false)
+				if (vertexFromID < 0 || vertexToID < 0)
 				{
-					vertexFromAdjs.add(vertexToID);
+					System.err.println(
+						GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
+					System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
 				}
 				
-				adjMatrix[vertexFromID][vertexToID] = true;
+				vertexFrom = new Vertex(vertexFromID, "white");
+				vertexTo = new Vertex(vertexToID, "white");
+
+				if (vertexList.contains(vertexFrom) == false)
+				{
+					vertexList.add(vertexFrom);						
+				}
+				if (vertexList.contains(vertexTo) == false)
+				{
+					vertexList.add(vertexTo);						
+				}
+			}
+		}
+		catch (FileNotFoundException e)
+		{
+			System.err.println(
+				GraphDriver.COULD_NOT_READ_GRAPH_FILE_MESSAGE +
+				GraphDriver.USAGE_MESSAGE);
+			System.exit(GraphDriver.COULD_NOT_READ_GRAPH_FILE);
+		}
+		catch (IOException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(GraphDriver.IO_EXCEPTION);
+		}
+			
+		Collections.sort(vertexList);
+		
+		int numOfVertices = vertexList.size();
+		
+		adjList = new ArrayList<ArrayList<Integer>>(numOfVertices);		
+		for (
+			int verticesToAdd = numOfVertices; 
+			verticesToAdd > 0;
+			--verticesToAdd)
+		{
+			adjList.add(new ArrayList<Integer>());
+		}
+		adjMatrix = new boolean[numOfVertices][numOfVertices];
+		
+		
+		ArrayList<Integer> vertexFromAdjs = null;
+		for (String[] adjVerticesRename : edges)
+		{
+			vertexFromID = 
+				Integer.parseInt(adjVerticesRename[VERTEX_FROM]);
+			vertexToID =
+				Integer.parseInt(adjVerticesRename[VERTEX_TO]);
+			
+			vertexFromAdjs = adjList.get(vertexFromID);
+			if (vertexFromAdjs.contains(vertexToID) == false)
+			{
+				vertexFromAdjs.add(vertexToID);
 			}
 			
-			for (ArrayList<Integer> vertexFromAdjsRename : adjList)
-			{
-				Collections.sort(vertexFromAdjsRename);
-			}
+			adjMatrix[vertexFromID][vertexToID] = true;
+		}
+		
+		for (ArrayList<Integer> vertexFromAdjsRename : adjList)
+		{
+			Collections.sort(vertexFromAdjsRename);
 		}
 		
 		// TODO keep?
