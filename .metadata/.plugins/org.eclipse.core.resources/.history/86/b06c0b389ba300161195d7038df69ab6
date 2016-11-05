@@ -156,6 +156,17 @@ final class Graph
 				
 				adjs.add(adjVerticesIds);
 				
+				// TODO remove
+				int debugA = adjs.get(adjs.size() - 1)[0];
+				int debugB = adjs.get(adjs.size() - 1)[1];
+				
+//				// TODO remove
+//				System.out.print(adjs.get(adjs.size() - 1)[0] + " ");
+//				System.out.println(adjs.get(adjs.size() - 1)[1]);
+				
+//				// TODO remove
+//				System.out.println(adjVerticesIds[0] + " " + adjVerticesIds[1]);
+				
 				fromVertex = new Vertex(fromVertexId, "white");
 				toVertex = new Vertex(toVertexId, "white");
 
@@ -185,6 +196,12 @@ final class Graph
 			|| (vertexList.get(vertexHighestID).getID() > vertexHighestID))
 		{
 			throw new InvalidEdgeException();
+		}
+		
+		// TODO remove
+		for (int j = 0; j < adjs.size(); ++j)
+		{
+			System.out.println(adjs.get(j)[0] + " " + adjs.get(j)[1]);
 		}
 		
 		return adjs;
@@ -226,6 +243,13 @@ final class Graph
 		{
 			Collections.sort(fromVertexAdjsOfAdjList);
 		}
+		
+		// TODO keep?
+//		if (vertexList.isEmpty())
+//		{
+//			System.err.println(GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
+//			System.exit(GraphDriver.INVALID_GRAPH_FILE_FORMAT);
+//		}
 	}
 	
 	private int[] readSourceDest()
@@ -376,7 +400,11 @@ final class Graph
 			for (int a = 0; a < numOfVertices; ++a)
 			{
 				transitiveClosureMatrix[g][a] = adjMatrix[g][a];
+				// TODO remove
+				System.out.print(adjMatrix[g][a] + " ");
 			}
+			// TODO remove
+			System.out.println("");
 		}
 		
 		for (int vertex = 0; vertex < numOfVertices; ++vertex)
