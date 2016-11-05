@@ -6,6 +6,14 @@ package graphSearcher;
 // TODO check for file that contains no text ended by newline
 // TODO check if vertex ids are positive ints
 // TODO check if vertex ids are only 1 apart (next to previous)
+// TODO check if adj is listed twice?
+// TODO dest not found case?
+
+// TODO constants for colors?
+
+// TODO put errors in their own file?
+
+// TODO change ID to id
 
 // TODO invalidGraphFormat boolean instead of exiting everywhere?
 
@@ -23,7 +31,12 @@ public final class GraphDriver
 	
 	static final int IO_EXCEPTION = 4;
 	
-	static final String USAGE_MESSAGE = "\nUsage: <graph_file_path>";
+	static final int INVALID_SOURCE_DEST_FORMAT = 5;
+	
+	static final int INVALID_SOURCE_DEST = 6;
+	
+	static final String USAGE_MESSAGE = 
+		"\nUsage: <graph_file_path>";
 	
 	static final String INVALID_GRAPH_FILE_FORMAT_MESSAGE = 							
 		"The format of the specified graph file is " + 
@@ -41,6 +54,14 @@ public final class GraphDriver
 	
 	static final String COULD_NOT_READ_GRAPH_FILE_MESSAGE = 
 		"The specified graph file could not be read.";
+	
+	// TODO change
+	static final String INVALID_SOURCE_DEST_FORMAT_MESSAGE = 
+		"Dont say source and dest like that.";
+
+	// TODO change
+	static final String INVALID_SOURCE_DEST_MESSAGE = 
+		"Dat source and dest dont exist.";
 	
 	public static void main(String[] args)
 	{

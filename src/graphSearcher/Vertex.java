@@ -22,6 +22,11 @@ final class Vertex implements Comparable<Vertex>
 		return color;
 	}
 	
+	void setColor(String color)
+	{
+		this.color = color;
+	}
+	
 	@Override
 	public boolean equals(Object object)
 	{

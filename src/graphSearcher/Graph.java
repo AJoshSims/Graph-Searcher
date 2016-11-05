@@ -7,10 +7,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 final class Graph 
 {
-	private static final int TWO_VERTICES_PER_EDGE = 2;
+	private static final int TWO_VERTICES = 2;
 	
 	private static final int VERTEX_FROM = 0;
 	
@@ -24,18 +26,23 @@ final class Graph
 	
 	private boolean[][] adjMatrix;
 	
+	private boolean cycleExists;
+	
 	Graph()
 	{
 		vertexList = null;
 		adjList = null;
 		adjMatrix = null;
+		cycleExists = false;
 	}
 	
 	void startGraph(String graphFilePath)
 	{
 		readInputGraph(graphFilePath);
 		
+		int[] sourceDest = readSourceDest();
 		
+		String orderOfDiscovery = dfsSearch(sourceDest);
 	}
 	
 	private void readInputGraph(String graphFilePath)
@@ -62,7 +69,7 @@ final class Graph
 					
 					edges.add(adjVertices);
 					
-					if (adjVertices.length != TWO_VERTICES_PER_EDGE)
+					if (adjVertices.length != TWO_VERTICES)
 					{
 						System.err.println(
 							GraphDriver.INVALID_GRAPH_FILE_FORMAT_MESSAGE);
@@ -146,18 +153,18 @@ final class Graph
 		}
 		
 		// TODO remove
-//		System.out.println(vertexList);
-//		System.out.println("");
-//		System.out.println(adjList);
-//		System.out.println("");
-//		for (boolean[] vertexFrom : adjMatrix)
-//		{
-//			for (boolean vertexTo : vertexFrom)
-//			{
-//				System.out.print(vertexTo + " ");
-//			}
-//			System.out.println("");
-//		}
+		System.out.println(vertexList);
+		System.out.println("");
+		System.out.println(adjList);
+		System.out.println("");
+		for (boolean[] vertexFrom : adjMatrix)
+		{
+			for (boolean vertexTo : vertexFrom)
+			{
+				System.out.print(vertexTo + " ");
+			}
+			System.out.println("");
+		}
 		
 		// TODO keep?
 //		if (vertexList.isEmpty())
@@ -167,15 +174,92 @@ final class Graph
 //		}
 	}
 	
-//	private boolean readSourceDest()
-//	{
-//		
-//	}
-//	
-//	private String dfsSearch()
-//	{
-//		
-//	}
+	private int[] readSourceDest()
+	{
+		Scanner userInput = new Scanner(System.in);
+		String[] maybeSourceDest = userInput.nextLine().split(" ");
+		if (maybeSourceDest.length != TWO_VERTICES)
+		{
+			System.err.println(GraphDriver.INVALID_SOURCE_DEST_FORMAT_MESSAGE);
+			System.exit(GraphDriver.INVALID_SOURCE_DEST_FORMAT);
+		}
+		
+		Integer sourceID = null;
+		Integer destID = null;
+		try
+		{
+			sourceID = Integer.parseInt(maybeSourceDest[VERTEX_FROM]);
+			destID = Integer.parseInt(maybeSourceDest[VERTEX_TO]);
+		}
+		catch (NumberFormatException e)
+		{
+			// TODO change
+			System.err.println("dat aint no integer.");
+			System.exit(1);
+		}
+		
+		Vertex source = new Vertex(sourceID, "white");
+		Vertex dest = new Vertex(destID, "white");
+		if (
+			(vertexList.contains(source) == false) 
+			|| (vertexList.contains(dest) == false))
+		{
+			return null;
+		}
+		
+		int[] sourceDest = {sourceID, destID};
+		
+		return sourceDest;
+	}
+	
+	private String dfsSearch(int[] sourceDest)
+	{
+		Integer source = sourceDest[VERTEX_FROM];
+		Integer dest = sourceDest[VERTEX_TO];
+		
+		String orderOfDiscovery = null;
+		LinkedList<Integer> discovered = new LinkedList<Integer>();
+		Integer discoveredVertex = source;
+		
+		discovered.push(discoveredVertex);
+		
+		Integer examinedVertexId = null;
+		Vertex adjVertex = null;
+		boolean popExaminedVertex = true;
+		while (discovered.isEmpty() == false)
+		{
+			examinedVertexId = discovered.peek();
+			popExaminedVertex = true;
+			
+			examineAdjs:
+			for (Integer adjVertexId : adjList.get(examinedVertexId))
+			{
+				adjVertex = vertexList.get(adjVertexId);
+				
+				examineColorOfAdj:
+				switch (adjVertex.getColor())
+				{
+					case "white":
+						orderOfDiscovery += adjVertexId + " ";
+						adjVertex.setColor("grey");
+						
+						popExaminedVertex = false;
+						break examineAdjs;
+					case "grey":
+						cycleExists = true;
+						break examineColorOfAdj;
+					case "black":
+						// Do nothing.
+				}
+			}
+			
+			if (popExaminedVertex == true)
+			{
+				discovered.pop();
+			}
+		}
+		
+	}
 //	
 //	private String transitiveClosure()
 //	{
